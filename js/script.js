@@ -146,3 +146,65 @@ btn.addEventListener('click', ()=>{
   setTimeout(()=>{ fadeInMusic(music, 3.5, 0.4); }, 900);
   setTimeout(showShareButtons, 5000);
 });
+
+// 🎓 Falling graduation caps animation
+const canvas = document.createElement("canvas");
+canvas.id = "snowCanvas";
+document.body.appendChild(canvas);
+const ctx = canvas.getContext("2d");
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+const caps = [];
+const capEmoji = "🎓";
+for (let i = 0; i < 40; i++) {
+  caps.push({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    size: 24 + Math.random() * 20,
+    speed: 0.5 + Math.random() * 1.5,
+    rot: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.02,
+  });
+}
+
+function drawCaps() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.font = "28px serif";
+  for (const c of caps) {
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.rot);
+    ctx.font = `${c.size}px serif`;
+    ctx.fillText(capEmoji, 0, 0);
+    ctx.restore();
+
+    c.y += c.speed;
+    c.rot += c.rotSpeed;
+    if (c.y > H + 50) {
+      c.y = -50;
+      c.x = Math.random() * W;
+    }
+  }
+  requestAnimationFrame(drawCaps);
+}
+drawCaps();
+
+// ให้ canvas อยู่หลังเนื้อหา
+canvas.style.position = "fixed";
+canvas.style.top = 0;
+canvas.style.left = 0;
+canvas.style.zIndex = 0;
+canvas.style.pointerEvents = "none";
+canvas.style.opacity = 0.9;
+
+// ดันการ์ดขึ้นมาเหนือ
+document.getElementById("card").style.position = "relative";
+document.getElementById("card").style.zIndex = 10;
+

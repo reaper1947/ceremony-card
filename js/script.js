@@ -103,10 +103,9 @@ function showNextPhoto(photos) {
     slideImg.onload = () => {
       slideImg.style.opacity = 1;
     };
-  }, 400); // fade out ก่อนเปลี่ยนรูป
+  }, 400); 
 }
 
-// เริ่มสไลด์
 if (friend.photos && friend.photos.length > 0) {
   slideImg.src = friend.photos[0];
   setInterval(() => showNextPhoto(friend.photos), 2000); // ทุก 2 วิ
@@ -144,23 +143,32 @@ function showShareButtons() {
   const shareDiv = document.createElement('div');
   shareDiv.className = 'share-container';
   shareDiv.innerHTML = `
-    <p class="share-text">แชร์ความยินดีนี้ให้เพื่อนๆ 🎉</p>
+    <p class="share-text">โชคดีนะทุกคนใช้ชีวิตให้มีความสุขกันเถอะ 🎉</p>
     <button class="share-btn line">LINE</button>
     <button class="share-btn ig">Instagram</button>
-    <button class="share-btn copy">คัดลอกลิงก์</button>
+    <button class="share-btn copy">Copy Link</button>
   `;
   document.getElementById('card').appendChild(shareDiv);
 
   // LINE share
   shareDiv.querySelector('.line').addEventListener('click', () => {
-    const msg = encodeURIComponent(`🎓 ฉันได้รับการ์ดวันรับปริญญาสุดพิเศษ! ดูได้ที่ ${window.location.href}`);
+    const msg = encodeURIComponent(`🎓 Card by Ter! ดูได้ที่ ${window.location.href}`);
     window.open(`https://line.me/R/msg/text/?${msg}`, '_blank');
   });
 
   // Instagram (fallback)
-  shareDiv.querySelector('.ig').addEventListener('click', () => {
-    window.open(`https://www.instagram.com/`, '_blank');
-  });
+  shareDiv.querySelector('.ig').addEventListener('click', async() => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('เตอร์ยังทำไม่เป็นขอโทษที ฮ่าๆ');
+    } catch (e) {
+      const temp = document.createElement('input');
+      temp.value = window.location.href;
+      document.body.appendChild(temp);
+      temp.select(); document.execCommand('copy');
+      temp.remove();
+      alert('เตอร์ยังทำไม่เป็นขอโทษที ฮ่าๆ');
+    }  });
 
   // Copy link
   shareDiv.querySelector('.copy').addEventListener('click', async () => {
@@ -338,8 +346,8 @@ function firework() {
     for (let p of particles){
       p.x+=p.vx;
       p.y+=p.vy;
-      p.vy+=0.05;   // แรงโน้มถ่วง
-      p.alpha -= 0.015; // fade ออก
+      p.vy+=0.05;  
+      p.alpha -= 0.015; 
       fctx.beginPath();
       fctx.fillStyle=`${p.color.replace('hsl','hsla').replace(')',`,${p.alpha})`)}`;
       fctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
@@ -349,28 +357,66 @@ function firework() {
   }
   animate();
 }
+// // ===== Button behavior =====
+// let fireworkInterval = null;
+
+// btn.addEventListener('click', () => {
+//   if (!celebrationStarted) {
+//     celebrationStarted = true;
+
+//     // ครั้งแรก: เล่นเสียง ปล่อย confetti ฉลอง
+//     startConfetti(4000);
+//     startStageFlash(4000);
+//     clap.currentTime = 0;
+//     clap.play();
+//     fadeInMusic(music, 3.5, 0.4);
+
+//     btn.textContent = "🎉 Press here for fun!";
+//     showShareButtons();
+//   } else {
+//     // ครั้งต่อไป: ยิงพลุ + confetti พร้อมกัน
+//     startConfetti(3000);
+//     firework();
+
+//     // ยิงต่อเนื่อง (3 วิ)
+//     if (!fireworkInterval) {
+//       fireworkInterval = setInterval(() => {
+//         firework();
+//         startConfetti(1500);
+//       }, 1200);
+//       setTimeout(() => {
+//         clearInterval(fireworkInterval);
+//         fireworkInterval = null;
+//       }, 4000);
+//     }
+//   }
+// });
 // ===== Button behavior =====
 let fireworkInterval = null;
+let clickCount = 0; 
 
 btn.addEventListener('click', () => {
+  clickCount++; 
+  btn.textContent = `🎉 Press here for fun! (${clickCount})`;
+
   if (!celebrationStarted) {
     celebrationStarted = true;
 
-    // ครั้งแรก: เล่นเสียง ปล่อย confetti ฉลอง
+    document.getElementById('friend-name').classList.add('fade-in');
+    document.getElementById('message').classList.add('fade-in');
+    document.getElementById('photo-container').classList.add('fade-in');
+
     startConfetti(4000);
     startStageFlash(4000);
     clap.currentTime = 0;
     clap.play();
     fadeInMusic(music, 3.5, 0.4);
 
-    btn.textContent = "🎉 Enjoy the Moment!";
     showShareButtons();
   } else {
-    // ครั้งต่อไป: ยิงพลุ + confetti พร้อมกัน
     startConfetti(3000);
     firework();
 
-    // ยิงต่อเนื่อง (3 วิ)
     if (!fireworkInterval) {
       fireworkInterval = setInterval(() => {
         firework();
@@ -383,4 +429,5 @@ btn.addEventListener('click', () => {
     }
   }
 });
+
 

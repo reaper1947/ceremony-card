@@ -36,7 +36,39 @@ function startConfetti(duration=5000) {
   })();
 }
 
-function startStageFlash(duration=3000) {
+// function startConfetti(duration=5000) {
+//   const end = Date.now() + duration;
+//   (function frame() {
+//     confetti({particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }});
+//     confetti({particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }});
+//     if (Date.now() < end) requestAnimationFrame(frame);
+//   })();
+// }
+
+function startConfetti(duration = 5000) {
+  // const colors = ['#FFD700', '#00FFFF', '#FF69B4', '#7FFF00', '#FFFFFF'];
+  const colors = ['#ff0000ff', '#00ffffff', '#ff0080ff', '#00ff73ff', '#ffee00ff'];
+  const end = Date.now() + duration;
+  (function frame() {
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0},
+      colors: colors.sort(() => 0.5 - Math.random()).slice(0, 3),
+    });
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1},
+      colors: colors.sort(() => 0.5 - Math.random()).slice(0, 3),
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+function startStageFlash(duration=10000) {
   let t=0;
   const colors = ['#ff0000ff','#ff0000ff','#ff0000ff','#ff0000ff','#ff0000ff'];
   const id = setInterval(()=>{
@@ -58,14 +90,28 @@ fetch('friends.json').then(r=>r.json()).then(all=>{
   document.getElementById('friend-name').textContent = friend.display_name ? `${friend.display_name}` : friend.name;
   document.getElementById('message').textContent = friend.message || "ขอแสดงความยินดีกับความสำเร็จครั้งนี้ 🎓";
 
-  const pc = document.getElementById('photo-container');
-  pc.innerHTML = "";
-  friend.photos.forEach(src=>{
-    const img = document.createElement('img');
-    img.src = src;
-    img.loading = "lazy";
-    pc.appendChild(img);
-  });
+const pc = document.getElementById('photo-container');
+pc.innerHTML = '<img id="slide-img" class="fade-slide" src="" alt="friend photo">';
+const slideImg = document.getElementById('slide-img');
+
+let currentPhoto = 0;
+function showNextPhoto(photos) {
+  slideImg.style.opacity = 0;
+  setTimeout(() => {
+    currentPhoto = (currentPhoto + 1) % photos.length;
+    slideImg.src = photos[currentPhoto];
+    slideImg.onload = () => {
+      slideImg.style.opacity = 1;
+    };
+  }, 400); // fade out ก่อนเปลี่ยนรูป
+}
+
+// เริ่มสไลด์
+if (friend.photos && friend.photos.length > 0) {
+  slideImg.src = friend.photos[0];
+  setInterval(() => showNextPhoto(friend.photos), 2000); // ทุก 2 วิ
+}
+// editend
 
   if (friend.theme && friend.theme !== "random") {
     const t = themes.find(x=>x.name===friend.theme);
@@ -120,14 +166,14 @@ function showShareButtons() {
   shareDiv.querySelector('.copy').addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      alert('คัดลอกลิงก์แล้ว ✅');
+      alert('✅');
     } catch (e) {
       const temp = document.createElement('input');
       temp.value = window.location.href;
       document.body.appendChild(temp);
       temp.select(); document.execCommand('copy');
       temp.remove();
-      alert('คัดลอกลิงก์แล้ว ✅');
+      alert('✅');
     }
   });
 }

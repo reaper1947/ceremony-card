@@ -27,7 +27,7 @@ function randomTheme() {
   return themes[Math.floor(Math.random()*themes.length)];
 }
 
-function startConfetti(duration=3000) {
+function startConfetti(duration=5000) {
   const end = Date.now() + duration;
   (function frame() {
     confetti({particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }});
@@ -38,7 +38,7 @@ function startConfetti(duration=3000) {
 
 function startStageFlash(duration=3000) {
   let t=0;
-  const colors = ['#FFD700','#00FFEA','#FF69B4','#7FFF00','#FFFFFF'];
+  const colors = ['#ff0000ff','#ff0000ff','#ff0000ff','#ff0000ff','#ff0000ff'];
   const id = setInterval(()=>{
     document.body.style.background = `linear-gradient(135deg, ${colors[t%colors.length]}, #111)`;
     t++;
@@ -79,6 +79,7 @@ fetch('friends.json').then(r=>r.json()).then(all=>{
 const clap = document.getElementById('clapSound');
 const music = document.getElementById('celebrationMusic');
 const btn = document.getElementById('surpriseBtn');
+let celebrationStarted = false;
 
 function fadeInMusic(audio, seconds=3.5, target=0.45) {
   audio.volume = 0.0;
@@ -110,7 +111,7 @@ function showShareButtons() {
     window.open(`https://line.me/R/msg/text/?${msg}`, '_blank');
   });
 
-  // Instagram (fallback opens IG)
+  // Instagram (fallback)
   shareDiv.querySelector('.ig').addEventListener('click', () => {
     window.open(`https://www.instagram.com/`, '_blank');
   });
@@ -131,42 +132,26 @@ function showShareButtons() {
   });
 }
 
-btn.addEventListener('click', ()=>{
-  btn.disabled = true; // prevent re-click
-  btn.style.transform = "scale(0.98)";
-  btn.textContent = "🎉 Enjoy the moment!";
-
-  clap.currentTime = 0;
-  clap.volume = 1.0;
-  clap.play().catch(()=>{});
-
-  startConfetti(3800);
-  startStageFlash(3800);
-
-  setTimeout(()=>{ fadeInMusic(music, 3.5, 0.4); }, 900);
-  setTimeout(showShareButtons, 5000);
-});
-
 // 🎓 Falling graduation caps animation
 const canvas = document.createElement("canvas");
 canvas.id = "snowCanvas";
 document.body.appendChild(canvas);
 const ctx = canvas.getContext("2d");
 
-let W, H;
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+let capW, capH;
+function resizeCaps() {
+  capW = canvas.width = window.innerWidth;
+  capH = canvas.height = window.innerHeight;
 }
-window.addEventListener("resize", resize);
-resize();
+window.addEventListener("resize", resizeCaps);
+resizeCaps();
 
 const caps = [];
 const capEmoji = "🎓";
 for (let i = 0; i < 40; i++) {
   caps.push({
-    x: Math.random() * W,
-    y: Math.random() * H,
+    x: Math.random() * capW,
+    y: Math.random() * capH,
     size: 24 + Math.random() * 20,
     speed: 0.5 + Math.random() * 1.5,
     rot: Math.random() * Math.PI * 2,
@@ -175,7 +160,7 @@ for (let i = 0; i < 40; i++) {
 }
 
 function drawCaps() {
-  ctx.clearRect(0, 0, W, H);
+  ctx.clearRect(0, 0, capW, capH);
   ctx.font = "28px serif";
   for (const c of caps) {
     ctx.save();
@@ -187,24 +172,169 @@ function drawCaps() {
 
     c.y += c.speed;
     c.rot += c.rotSpeed;
-    if (c.y > H + 50) {
+    if (c.y > capH + 50) {
       c.y = -50;
-      c.x = Math.random() * W;
+      c.x = Math.random() * capW;
     }
   }
   requestAnimationFrame(drawCaps);
 }
 drawCaps();
 
-// ให้ canvas อยู่หลังเนื้อหา
 canvas.style.position = "fixed";
 canvas.style.top = 0;
 canvas.style.left = 0;
-canvas.style.zIndex = 0;
+canvas.style.zIndex = -1;
 canvas.style.pointerEvents = "none";
 canvas.style.opacity = 0.9;
 
-// ดันการ์ดขึ้นมาเหนือ
-document.getElementById("card").style.position = "relative";
-document.getElementById("card").style.zIndex = 10;
+// // ===== Realistic Spotlight =====
+// const spotlightCanvas = document.getElementById("spotlightCanvas");
+// const spCtx = spotlightCanvas.getContext("2d");
+// let spotW = window.innerWidth, spotH = window.innerHeight;
+// spotlightCanvas.width = spotW; spotlightCanvas.height = spotH;
+
+// window.addEventListener("resize", () => {
+//   spotW = window.innerWidth; spotH = window.innerHeight;
+//   spotlightCanvas.width = spotW; spotlightCanvas.height = spotH;
+// });
+
+// let spotlights = [];
+// function createSpotlights() {
+//   spotlights = [];
+//   for (let i = 0; i < 3; i++) {
+//     spotlights.push({
+//       x: (i + 0.3) * (spotW / 3),
+//       width: 150 + Math.random() * 80,
+//       height: spotH / 2, // ครึ่งจอ
+//       angle: Math.random() * Math.PI / 6 - Math.PI / 12,
+//       sparkle: Math.random(),
+//       color: `hsla(${Math.random()*40 + 40},100%,75%,0.3)`
+//     });
+//   }
+// }
+// createSpotlights();
+
+// function drawSpotlights() {
+//   spCtx.clearRect(0, 0, spotW, spotH);
+//   for (let s of spotlights) {
+//     spCtx.save();
+//     spCtx.translate(s.x, spotH);
+//     spCtx.rotate(s.angle + Math.sin(Date.now()/2000 + s.x)*0.1);
+//     const grad = spCtx.createLinearGradient(0,0,0,-s.height);
+//     grad.addColorStop(0, s.color);
+//     grad.addColorStop(0.5, "rgba(255,255,255,0.1)");
+//     grad.addColorStop(1, "transparent");
+//     spCtx.fillStyle = grad;
+//     spCtx.beginPath();
+//     spCtx.moveTo(-s.width/2, 0);
+//     spCtx.lineTo(s.width/2, 0);
+//     spCtx.lineTo(0, -s.height);
+//     spCtx.closePath();
+//     spCtx.fill();
+//     spCtx.restore();
+
+//     // ✨ ระยิบระยับ
+//     const sparkleX = s.x + Math.sin(Date.now()/100+s.x)*40;
+//     const sparkleY = spotH - s.height/2 + Math.cos(Date.now()/500+s.x)*30;
+//     spCtx.beginPath();
+//     spCtx.fillStyle = `hsla(${Math.random()*360},100%,80%,0.6)`;
+//     spCtx.arc(sparkleX, sparkleY, Math.random()*3+1, 0, Math.PI*2);
+//     spCtx.fill();
+//   }
+//   requestAnimationFrame(drawSpotlights);
+// }
+// ===== Fireworks Setup =====
+let spotW = window.innerWidth;
+let spotH = window.innerHeight;
+
+// ===== Realistic Fireworks =====
+const fireworksCanvas = document.createElement("canvas");
+fireworksCanvas.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:4;";
+document.body.appendChild(fireworksCanvas);
+const fctx = fireworksCanvas.getContext("2d");
+fireworksCanvas.width = spotW; fireworksCanvas.height = spotH;
+
+window.addEventListener("resize", ()=> {
+  spotW = window.innerWidth;
+  spotH = window.innerHeight;
+  fireworksCanvas.width = spotW;
+  fireworksCanvas.height = spotH;
+});
+
+
+function firework() {
+  const boomSound = new Audio("assets/sounds/firework.mp3");
+  boomSound.volume = 0.3;
+  boomSound.play().catch(()=>{});
+
+  const x = Math.random() * spotW;
+  const baseY = spotH - 80;
+  const color = `hsl(${Math.random()*360},100%,65%)`;
+  const particles = [];
+
+  for (let i=0;i<70;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = Math.random()*5+2;
+    particles.push({
+      x,
+      y: baseY,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - (Math.random()*6+3),
+      alpha: 1,
+      color,
+      radius: Math.random()*2+1,
+    });
+  }
+
+  function animate(){
+    fctx.clearRect(0,0,spotW,spotH);
+    for (let p of particles){
+      p.x+=p.vx;
+      p.y+=p.vy;
+      p.vy+=0.05;   // แรงโน้มถ่วง
+      p.alpha -= 0.015; // fade ออก
+      fctx.beginPath();
+      fctx.fillStyle=`${p.color.replace('hsl','hsla').replace(')',`,${p.alpha})`)}`;
+      fctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+      fctx.fill();
+    }
+    if (particles.some(p=>p.alpha>0)) requestAnimationFrame(animate);
+  }
+  animate();
+}
+// ===== Button behavior =====
+let fireworkInterval = null;
+
+btn.addEventListener('click', () => {
+  if (!celebrationStarted) {
+    celebrationStarted = true;
+
+    // ครั้งแรก: เล่นเสียง ปล่อย confetti ฉลอง
+    startConfetti(4000);
+    startStageFlash(4000);
+    clap.currentTime = 0;
+    clap.play();
+    fadeInMusic(music, 3.5, 0.4);
+
+    btn.textContent = "🎉 Enjoy the Moment!";
+    showShareButtons();
+  } else {
+    // ครั้งต่อไป: ยิงพลุ + confetti พร้อมกัน
+    startConfetti(3000);
+    firework();
+
+    // ยิงต่อเนื่อง (3 วิ)
+    if (!fireworkInterval) {
+      fireworkInterval = setInterval(() => {
+        firework();
+        startConfetti(1500);
+      }, 1200);
+      setTimeout(() => {
+        clearInterval(fireworkInterval);
+        fireworkInterval = null;
+      }, 4000);
+    }
+  }
+});
 

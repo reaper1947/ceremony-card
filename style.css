@@ -151,10 +151,10 @@ canvas[id^="fireworksCanvas"] {
 } */
 
 .fade-slide {
-  width: 30%;             /* เดิม 85% → ลดเหลือ 30% ของความกว้าง card */
-  max-width: 140px;       /* จำกัดไม่ให้เกิน 140px (ประมาณขนาดรูปบัตรนักศึกษา) */
+  width: 30%;             
+  max-width: 140px;       
   height: auto;
-  max-height: 20vh;       /* เดิม 60vh → เหลือ 20vh เพื่อลดลง 3 เท่า */
+  max-height: 20vh;      
   border-radius: 10px;
   object-fit: contain;
   opacity: 1;

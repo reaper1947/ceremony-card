@@ -140,7 +140,7 @@ canvas[id^="fireworksCanvas"] {
   pointer-events: none;
 }
 
-.fade-slide {
+/* .fade-slide {
   width: 90%;
   max-width: 400px;
   border-radius: 10px;
@@ -148,6 +148,18 @@ canvas[id^="fireworksCanvas"] {
   margin: 15px auto;
   opacity: 1;
   transition: opacity 0.8s ease-in-out;
+} */
+
+.fade-slide {
+  width: 85%;             
+  max-width: 320px;       
+  height: auto;
+  max-height: 50vh;        
+  border-radius: 12px;
+  object-fit: contain;     
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+  margin: 0 auto;
 }
 
 html, body {

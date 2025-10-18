@@ -151,15 +151,16 @@ canvas[id^="fireworksCanvas"] {
 } */
 
 .fade-slide {
-  width: 85%;             
-  max-width: 320px;       
+  width: 30%;             /* เดิม 85% → ลดเหลือ 30% ของความกว้าง card */
+  max-width: 140px;       /* จำกัดไม่ให้เกิน 140px (ประมาณขนาดรูปบัตรนักศึกษา) */
   height: auto;
-  max-height: 50vh;        
-  border-radius: 12px;
-  object-fit: contain;     
+  max-height: 20vh;       /* เดิม 60vh → เหลือ 20vh เพื่อลดลง 3 เท่า */
+  border-radius: 10px;
+  object-fit: contain;
   opacity: 1;
   transition: opacity 0.8s ease-in-out;
   margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 html, body {

@@ -1,0 +1,78 @@
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  display: flex; align-items: center; justify-content: center;
+  background: #111; color: #fff;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  transition: background 0.3s ease;
+}
+#card {
+  max-width: 980px; width: 94%;
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  text-align: center;
+}
+h1 { margin: 4px 0 6px; font-size: 2rem; }
+h2 { margin: 0 0 10px; font-weight: 700; }
+p { margin: 0.25rem 0; }
+
+.uni-header { text-align: center; margin-bottom: 12px; animation: fadeIn 0.8s ease-in-out; }
+.uni-logo { width: 120px; height: auto; margin-bottom: 8px; }
+.uni-name-en { font-family: 'Georgia', serif; font-size: 1.05rem; color: #f8e9a1; margin: 0; }
+.uni-name-th { font-family: 'Sarabun', sans-serif; font-size: 1rem; color: #ffffff; margin: 2px 0 0; }
+
+.photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.photos img {
+  width: 100%; height: 100%; object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.photos img:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.45); }
+
+.btn {
+  font-size: 1.05rem;
+  margin-top: 6px;
+  padding: 12px 20px;
+  border: none; border-radius: 12px;
+  background: #ffd700; color: #111;
+  font-weight: 800; letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(255,215,0,0.35);
+  transition: transform 0.15s ease, filter 0.2s;
+}
+.btn:active { transform: scale(0.98); }
+.hint { opacity: 0.9; font-size: 0.95rem; margin-top: 6px; }
+
+.share-container { margin-top: 24px; animation: fadeIn 0.6s ease-in-out; }
+.share-text { font-size: 1.05rem; margin-bottom: 10px; }
+.share-btn {
+  margin: 6px; padding: 10px 18px;
+  border: none; border-radius: 10px;
+  cursor: pointer; font-weight: 700;
+  transition: transform 0.2s;
+}
+.share-btn:hover { transform: scale(1.05); }
+.share-btn.line { background-color: #00c300; color: #fff; }
+.share-btn.ig { background: linear-gradient(45deg,#f09433,#bc1888); color:#fff; }
+.share-btn.copy { background: #444; color: #fff; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 720px) {
+  .photos { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .photos { grid-template-columns: 1fr; }
+  .uni-logo { width: 100px; }
+  h1 { font-size: 1.75rem; }
+}

@@ -149,3 +149,87 @@ canvas[id^="fireworksCanvas"] {
   opacity: 1;
   transition: opacity 0.8s ease-in-out;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  flex-direction: column;
+}
+
+#card {
+  width: 90%;
+  max-width: 420px;
+  height: 95vh;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  padding: 10px 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.uni-logo {
+  width: 80px;
+  height: auto;
+  margin: 10px auto 5px auto;
+}
+
+.uni-name-en {
+  font-size: 12px;
+  margin: 0;
+}
+
+.uni-name-th {
+  font-size: 13px;
+  margin: 0 0 8px 0;
+}
+
+#photo-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fade-slide {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  border-radius: 12px;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.btn {
+  background: #ff69b4;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255,105,180,0.4);
+  margin-top: 10px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #ddd;
+  margin-bottom: 5px;
+}

@@ -95,3 +95,47 @@ p { margin: 0.25rem 0; }
   .uni-logo { width: 100px; }
   h1 { font-size: 1.75rem; }
 }
+
+/* #spotlightCanvas {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.9;
+} */
+
+/* 🌟 Realistic Spotlight */
+/* #spotlightCanvas {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.85;
+  filter: blur(3px) brightness(1.3);
+  mix-blend-mode: screen;
+} */
+
+/* 🎓 Falling caps behind card */
+#snowCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* 🎆 Fireworks layer */
+canvas[id^="fireworksCanvas"] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  pointer-events: none;
+}
